@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: backend
+    env: python
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "gunicorn app:app -b 0.0.0.0:$PORT"
+    envVars:
+      - key: PORT
+        value: 10000
+    plan: free
+    autoDeploy: true
+
+  - type: static
+    name: frontend
+    staticPublishPath: frontend
+    buildCommand: "npm install && npm run build"  # Ajusta si usas un framework como React
+    envVars:
+      - key: BACKEND_URL
+        value: "https://backend.onrender.com"  # Usa la URL del backend una vez desplegado
+    plan: free
+    autoDeploy: true
